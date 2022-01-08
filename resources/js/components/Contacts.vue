@@ -179,9 +179,15 @@ export default {
             alert(res.data.message);
             this.getContacts();
           } else {
-            this.contErr.name = res.data.errors.name[0];
-            this.contErr.email = res.data.errors.email[0];
-            this.contErr.phone = res.data.errors.phone[0];
+            this.contErr.name = res.data.errors.name
+              ? res.data.errors.name[0]
+              : "";
+            this.contErr.email = res.data.errors.email
+              ? res.data.errors.email[0]
+              : "";
+            this.contErr.phone = res.data.errors.phone
+              ? res.data.errors.phone[0]
+              : "";
             // console.log(res.data.errors);
           }
         })
@@ -210,11 +216,22 @@ export default {
       axios
         .put(`http://localhost/fresh-app/api/upd/${id}`, this.cont)
         .then((res) => res)
-        .then((res) => {          
+        .then((res) => {
           var datal = res.data;
-          alert(datal.message);
-          this.reset();
-          this.getContacts();
+          if (datal.status) {
+            alert(datal.message);
+            this.reset();
+            this.getContacts();
+          } else {
+            console.log(datal);
+            this.contErr.name = datal.errors.name ? datal.errors.name[0] : "";
+            this.contErr.email = datal.errors.email
+              ? datal.errors.email[0]
+              : "";
+            this.contErr.phone = datal.errors.phone
+              ? datal.errors.phone[0]
+              : "";
+          }
         })
         .catch((error) => console.log(error));
     },

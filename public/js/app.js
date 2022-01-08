@@ -5444,9 +5444,9 @@ __webpack_require__.r(__webpack_exports__);
 
           _this.getContacts();
         } else {
-          _this.contErr.name = res.data.errors.name[0];
-          _this.contErr.email = res.data.errors.email[0];
-          _this.contErr.phone = res.data.errors.phone[0]; // console.log(res.data.errors);
+          _this.contErr.name = res.data.errors.name ? res.data.errors.name[0] : "";
+          _this.contErr.email = res.data.errors.email ? res.data.errors.email[0] : "";
+          _this.contErr.phone = res.data.errors.phone ? res.data.errors.phone[0] : ""; // console.log(res.data.errors);
         }
       })["catch"](function (error) {
         return console.log(error);
@@ -5482,11 +5482,19 @@ __webpack_require__.r(__webpack_exports__);
         return res;
       }).then(function (res) {
         var datal = res.data;
-        alert(datal.message);
 
-        _this3.reset();
+        if (datal.status) {
+          alert(datal.message);
 
-        _this3.getContacts();
+          _this3.reset();
+
+          _this3.getContacts();
+        } else {
+          console.log(datal);
+          _this3.contErr.name = datal.errors.name ? datal.errors.name[0] : "";
+          _this3.contErr.email = datal.errors.email ? datal.errors.email[0] : "";
+          _this3.contErr.phone = datal.errors.phone ? datal.errors.phone[0] : "";
+        }
       })["catch"](function (error) {
         return console.log(error);
       });
