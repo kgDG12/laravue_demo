@@ -10,51 +10,65 @@
           <h2>Add Contact</h2>
         </div>
         <div class="col-12 text-center">
-          <form
-            @submit.prevent=""
-            class="row g-3 needs-validation my-4"
-            novalidate
-          >
-            <div class="col">
-              <label class="form-label">Name</label>
-              <input
-                v-model="cont.name"
-                type="text"
-                class="form-control"
-                required
-              />
-              <div class="text-danger">{{ contErr.name }}</div>
-            </div>
-            <div class="col">
-              <label class="form-label">Email</label>
-              <input
-                v-model="cont.email"
-                type="email"
-                class="form-control"
-                required
-              />
-              <div class="text-danger">{{ contErr.email }}</div>
-            </div>
-            <div class="col">
-              <label class="form-label">Phone</label>
-              <input
-                v-model="cont.phone"
-                type="text"
-                class="form-control"
-                required
-              />
-              <div class="text-danger">{{ contErr.phone }}</div>
-            </div>
-            <div class="col-12 text-center">
-              <button
-                class="btn btn-primary"
-                @click="addContact()"
-                type="submit"
-              >
-                Add Contact
-              </button>
-            </div>
-          </form>
+          <div class="row">
+            <form
+              @submit.prevent=""
+              class="row g-3 needs-validation my-4"
+              novalidate
+            >
+              <div class="col">
+                <label class="form-label">Name</label>
+                <input
+                  v-model="cont.name"
+                  type="text"
+                  class="form-control"
+                  required
+                />
+                <div class="text-danger">{{ contErr.name }}</div>
+              </div>
+              <div class="col">
+                <label class="form-label">Email</label>
+                <input
+                  v-model="cont.email"
+                  type="email"
+                  class="form-control"
+                  required
+                />
+                <div class="text-danger">{{ contErr.email }}</div>
+              </div>
+              <div class="col">
+                <label class="form-label">Phone</label>
+                <input
+                  v-model="cont.phone"
+                  type="text"
+                  class="form-control"
+                  required
+                />
+                <div class="text-danger">{{ contErr.phone }}</div>
+              </div>
+              <div class="col-12 text-center">
+                <button
+                  v-if="!edit"
+                  class="btn btn-primary"
+                  @click="addContact()"
+                  type="submit"
+                >
+                  Add Contact
+                </button>
+                <button
+                  v-if="edit"
+                  class="btn btn-success"
+                  @click="updContact(cont.id)"
+                  type="submit"
+                >
+                  Update Contact
+                </button>
+                <button class="btn btn-secondary" @click="reset()">
+                  Reset
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
@@ -84,6 +98,12 @@
                         </h6>
                       </div>
                       <div class="col-4">
+                        <button
+                          @click="editContact(cont.id)"
+                          class="btn btn-sm btn-success"
+                        >
+                          Edit
+                        </button>
                         <button
                           @click="deleteContact(cont.id)"
                           class="btn btn-sm btn-danger"
@@ -125,6 +145,7 @@ export default {
         phone: "",
       },
       edit: false,
+      editbtn: "btn btn-success",
     };
   },
   created() {
@@ -144,30 +165,58 @@ export default {
       }
     },
     addContact() {
-      if (this.edit) {
-      } else {
-        axios
-          .post("http://localhost/fresh-app/api/add", this.cont)
-          .then((res) => res)
-          .then((res) => {
-            if (res.data.status) {
-              this.contErr.name = "";
-              this.contErr.email = "";
-              this.contErr.phone = "";
-              this.cont.name = "";
-              this.cont.email = "";
-              this.cont.phone = "";
-              alert(res.data.message);
-              this.getContacts();
-            } else {
-              this.contErr.name = res.data.errors.name[0];
-              this.contErr.email = res.data.errors.email[0];
-              this.contErr.phone = res.data.errors.phone[0];
-              // console.log(res.data.errors);
+      axios
+        .post("http://localhost/fresh-app/api/add", this.cont)
+        .then((res) => res)
+        .then((res) => {
+          if (res.data.status) {
+            this.contErr.name = "";
+            this.contErr.email = "";
+            this.contErr.phone = "";
+            this.cont.name = "";
+            this.cont.email = "";
+            this.cont.phone = "";
+            alert(res.data.message);
+            this.getContacts();
+          } else {
+            this.contErr.name = res.data.errors.name[0];
+            this.contErr.email = res.data.errors.email[0];
+            this.contErr.phone = res.data.errors.phone[0];
+            // console.log(res.data.errors);
+          }
+        })
+        .catch((error) => console.log(error));
+    },
+    editContact(id) {
+      axios
+        .get(`http://localhost/fresh-app/api/get/${id}`)
+        .then((res) => res)
+        .then((res) => {
+          var datal = res.data;
+          if (datal.status) {
+            if (this.addForm === false) {
+              this.toggle();
             }
-          })
-          .catch((error) => console.log(error));
-      }
+            this.edit = true;
+            this.cont.id = datal.data.id;
+            this.cont.name = datal.data.name;
+            this.cont.email = datal.data.email;
+            this.cont.phone = datal.data.phone;
+          }
+        })
+        .catch((error) => console.log(error));
+    },
+    updContact(id) {
+      axios
+        .put(`http://localhost/fresh-app/api/upd/${id}`, this.cont)
+        .then((res) => res)
+        .then((res) => {          
+          var datal = res.data;
+          alert(datal.message);
+          this.reset();
+          this.getContacts();
+        })
+        .catch((error) => console.log(error));
     },
     getContacts() {
       axios
@@ -191,6 +240,16 @@ export default {
           })
           .catch((error) => console.log(error));
       }
+    },
+    reset() {
+      this.edit = false;
+      this.cont.id = "";
+      this.cont.name = "";
+      this.cont.email = "";
+      this.cont.phone = "";
+      this.contErr.name = "";
+      this.contErr.email = "";
+      this.contErr.phone = "";
     },
   },
 };
