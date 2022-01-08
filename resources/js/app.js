@@ -22,7 +22,6 @@ window.Vue = require('vue').default;
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('contacts', require('./components/Contacts.vue').default);
 Vue.component('navbar', require('./components/Navbar.vue').default);
-Vue.component('addform', require('./components/Form.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

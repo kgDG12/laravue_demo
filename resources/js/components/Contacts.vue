@@ -165,6 +165,7 @@ export default {
           .then((res) => res)
           .then((res) => {
             alert(res.data.message);
+            this.getContacts();
           })
           .catch((error) => console.log(error));
       }
