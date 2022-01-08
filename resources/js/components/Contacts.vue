@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-12 text-center mb-4">
-          <h1>Contacts</h1>
+          <h2>Contacts</h2>
         </div>
         <div class="col-12">
           <div class="row">
@@ -13,12 +13,19 @@
                   <h5 class="card-title">{{ cont.name }}</h5>
                 </div>
                 <div class="card-body">
-                  <h6 class="card-subtitle mb-2 text-muted">
-                    Email: {{ cont.email }}
-                  </h6>
-                  <h6 class="card-subtitle mb-2 text-muted">
-                    Email: {{ cont.phone }}
-                  </h6>
+                  <div class="row">
+                    <div class="col">
+                      <h6 class="card-subtitle mb-2 text-muted">
+                        Email: {{ cont.email }}
+                      </h6>
+                      <h6 class="card-subtitle mb-2 text-muted">
+                        Phone: {{ cont.phone }}
+                      </h6>
+                    </div>
+                    <div class="col-4">
+                      
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -51,6 +58,7 @@ export default {
         .then((res) => res.json())
         .then((res) => {
           this.data = res.data;
+          this.status = res.status;
         });
     },
   },
