@@ -1,34 +1,114 @@
 <template>
-  <div class="container">
+  <div class="container my-4">
+    <!-- form -->
     <div class="container-fluid">
-      <div class="row">
+      <button v-bind:class="btn.cls" @click="toggle()">
+        {{ btn.txt }} Form
+      </button>
+      <div class="row" v-if="addForm">
         <div class="col-12 text-center mb-4">
-          <h2>Contacts</h2>
+          <h2>Add Contacts</h2>
         </div>
-        <div class="col-12">
-          <div class="row">
-            <div v-for="cont in data" :key="cont.id" class="col-4 mb-4">
-              <div class="card">
-                <div class="card-header">
-                  <h5 class="card-title">{{ cont.name }}</h5>
+        <div class="col-12 text-center">
+          <form
+            @submit.prevent=""
+            class="row g-3 needs-validation my-4"
+            novalidate
+          >
+            <div class="col">
+              <label class="form-label">Name</label>
+              <input
+                v-model="cont.name"
+                type="text"
+                class="form-control"
+                required
+              />
+              <div class="valid-feedback">Looks good!</div>
+            </div>
+            <div class="col">
+              <label class="form-label">Email</label>
+              <input
+                v-model="cont.email"
+                type="email"
+                class="form-control"
+                required
+              />
+              <div class="valid-feedback">Enter Valid Email</div>
+            </div>
+            <div class="col">
+              <label class="form-label">Phone</label>
+              <input
+                v-model="cont.phone"
+                type="text"
+                class="form-control"
+                required
+              />
+              <div class="valid-feedback">Enter Valid Phone Number</div>
+            </div>
+            <div class="col-12">
+              <div class="form-check">
+                <label class="form-check-label" for="invalidCheck">
+                  <input
+                    class="form-check-input me-1"
+                    type="checkbox"
+                    v-model="cont.checkbox"
+                    name="checkbox"
+                    value="1"
+                    required
+                  />
+                  Agree to terms and conditions
+                </label>
+                <div class="valid-feedback">
+                  You must agree before submitting.
                 </div>
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col">
-                      <h6 class="card-subtitle mb-2 text-muted">
-                        Email: {{ cont.email }}
-                      </h6>
-                      <h6 class="card-subtitle mb-2 text-muted">
-                        Phone: {{ cont.phone }}
-                      </h6>
-                    </div>
-                    <div class="col-4">
-                      <button
-                        @click="deleteContact(cont.id)"
-                        class="btn btn-sm btn-danger"
-                      >
-                        Delete
-                      </button>
+              </div>
+            </div>
+            <div class="col-12 text-center">
+              <button
+                class="btn btn-primary"
+                @click="addContact()"
+                type="submit"
+              >
+                Add Contact
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- listing Contacts -->
+    <div class="container">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12 text-center mb-4">
+            <h2>Contacts</h2>
+          </div>
+          <div class="col-12">
+            <div class="row">
+              <div v-for="cont in data" :key="cont.id" class="col-4 mb-4">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title">{{ cont.name }}</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col">
+                        <h6 class="card-subtitle mb-2 text-muted">
+                          Email: {{ cont.email }}
+                        </h6>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                          Phone: {{ cont.phone }}
+                        </h6>
+                      </div>
+                      <div class="col-4">
+                        <button
+                          @click="deleteContact(cont.id)"
+                          class="btn btn-sm btn-danger"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -45,33 +125,68 @@ export default {
   data() {
     return {
       data: [],
+      status: "",
+      addForm: false,
+      btn: {
+        txt: "Open",
+        cls: "btn btn-primary",
+      },
       cont: {
         id: "",
         name: "",
         email: "",
         phone: "",
+        checkbox: false,
       },
-      status: "",
+      edit: false,
     };
   },
   created() {
     this.getContacts();
+    this.$emit("contacts");
   },
   methods: {
+    toggle() {
+      if (this.addForm) {
+        this.addForm = false;
+        this.btn.txt = "Open";
+        this.btn.cls = "btn btn-primary";
+      } else {
+        this.addForm = true;
+        this.btn.txt = "Close";
+        this.btn.cls = "btn btn-danger";
+      }
+    },
+    addContact() {
+      if (this.edit) {
+      } else {
+        axios
+          .post("http://localhost/fresh-app/api/add", this.cont)
+          .then((res) => res)
+          .then((res) => {
+            alert(res.data.message);
+          })
+          .catch((error) => console.log(error));
+      }
+    },
     getContacts() {
-      fetch("http://localhost/fresh-app/api/get/")
-        .then((res) => res.json())
+      axios
+        .get("http://localhost/fresh-app/api/get/")
+        .then((res) => res)
         .then((res) => {
-          this.data = res.data;
-          this.status = res.status;
-        });
+          this.data = res.data.data;
+          this.status = res.data.status;
+        })
+        .catch((error) => console.log(error));
+      // .then((res) => console.log((res)));
     },
     deleteContact(id) {
       if (confirm("Are You Sure?")) {
-        fetch(`http://localhost/fresh-app/api/del/${id}`)
-          .then((res) => res.json())
+        axios
+          .get(`http://localhost/fresh-app/api/del/${id}`)
+          .then((res) => res)
           .then((res) => {
-            alert(res.message);
+            alert(res.data.message);
             this.getContacts();
           })
           .catch((error) => console.log(error));

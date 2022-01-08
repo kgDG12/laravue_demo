@@ -12,7 +12,7 @@
 <body>
     <div id="app">
         <navbar></navbar>
-        <addform></addform>
+        {{-- <addform></addform> --}}
         <contacts></contacts>
     </div>
 

@@ -5304,41 +5304,153 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       data: [],
+      status: "",
+      addForm: false,
+      btn: {
+        txt: "Open",
+        cls: "btn btn-primary"
+      },
       cont: {
         id: "",
         name: "",
         email: "",
-        phone: ""
+        phone: "",
+        checkbox: false
       },
-      status: ""
+      edit: false
     };
   },
   created: function created() {
     this.getContacts();
+    this.$emit("contacts");
   },
   methods: {
+    toggle: function toggle() {
+      if (this.addForm) {
+        this.addForm = false;
+        this.btn.txt = "Open";
+        this.btn.cls = "btn btn-primary";
+      } else {
+        this.addForm = true;
+        this.btn.txt = "Close";
+        this.btn.cls = "btn btn-danger";
+      }
+    },
+    addContact: function addContact() {
+      if (this.edit) {} else {
+        axios.post("http://localhost/fresh-app/api/add", this.cont).then(function (res) {
+          return res;
+        }).then(function (res) {
+          alert(res.data.message);
+        })["catch"](function (error) {
+          return console.log(error);
+        });
+      }
+    },
     getContacts: function getContacts() {
       var _this = this;
 
-      fetch("http://localhost/fresh-app/api/get/").then(function (res) {
-        return res.json();
+      axios.get("http://localhost/fresh-app/api/get/").then(function (res) {
+        return res;
       }).then(function (res) {
-        _this.data = res.data;
-        _this.status = res.status;
-      });
+        _this.data = res.data.data;
+        _this.status = res.data.status;
+      })["catch"](function (error) {
+        return console.log(error);
+      }); // .then((res) => console.log((res)));
     },
     deleteContact: function deleteContact(id) {
       var _this2 = this;
 
       if (confirm("Are You Sure?")) {
-        fetch("http://localhost/fresh-app/api/del/".concat(id)).then(function (res) {
-          return res.json();
+        axios.get("http://localhost/fresh-app/api/del/".concat(id)).then(function (res) {
+          return res;
         }).then(function (res) {
-          alert(res.message);
+          alert(res.data.message);
 
           _this2.getContacts();
         })["catch"](function (error) {
@@ -5448,6 +5560,31 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -5455,7 +5592,15 @@ __webpack_require__.r(__webpack_exports__);
       btn: {
         txt: "Open",
         cls: "btn btn-primary"
-      }
+      },
+      cont: {
+        id: "",
+        name: "",
+        email: "",
+        phone: "",
+        checkbox: false
+      },
+      edit: false
     };
   },
   methods: {
@@ -5468,6 +5613,17 @@ __webpack_require__.r(__webpack_exports__);
         this.addForm = true;
         this.btn.txt = "Close";
         this.btn.cls = "btn btn-danger";
+      }
+    },
+    addContact: function addContact() {
+      if (this.edit) {} else {
+        axios.post("http://localhost/fresh-app/api/add", this.cont).then(function (res) {
+          return res;
+        }).then(function (res) {
+          alert(res.data.message);
+        })["catch"](function (error) {
+          return console.log(error);
+        });
       }
     }
   }
@@ -28283,83 +28439,317 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
+  return _c("div", { staticClass: "container my-4" }, [
     _c("div", { staticClass: "container-fluid" }, [
-      _c("div", { staticClass: "row" }, [
-        _vm._m(0),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-12" }, [
-          _c(
-            "div",
-            { staticClass: "row" },
-            _vm._l(_vm.data, function (cont) {
-              return _c("div", { key: cont.id, staticClass: "col-4 mb-4" }, [
-                _c("div", { staticClass: "card" }, [
-                  _c("div", { staticClass: "card-header" }, [
-                    _c("h5", { staticClass: "card-title" }, [
-                      _vm._v(_vm._s(cont.name)),
+      _c(
+        "button",
+        {
+          class: _vm.btn.cls,
+          on: {
+            click: function ($event) {
+              return _vm.toggle()
+            },
+          },
+        },
+        [_vm._v("\n      " + _vm._s(_vm.btn.txt) + " Form\n    ")]
+      ),
+      _vm._v(" "),
+      _vm.addForm
+        ? _c("div", { staticClass: "row" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-12 text-center" }, [
+              _c(
+                "form",
+                {
+                  staticClass: "row g-3 needs-validation my-4",
+                  attrs: { novalidate: "" },
+                  on: {
+                    submit: function ($event) {
+                      $event.preventDefault()
+                    },
+                  },
+                },
+                [
+                  _c("div", { staticClass: "col" }, [
+                    _c("label", { staticClass: "form-label" }, [
+                      _vm._v("Name"),
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.cont.name,
+                          expression: "cont.name",
+                        },
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text", required: "" },
+                      domProps: { value: _vm.cont.name },
+                      on: {
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.cont, "name", $event.target.value)
+                        },
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "valid-feedback" }, [
+                      _vm._v("Looks good!"),
                     ]),
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "card-body" }, [
-                    _c("div", { staticClass: "row" }, [
-                      _c("div", { staticClass: "col" }, [
-                        _c(
-                          "h6",
-                          { staticClass: "card-subtitle mb-2 text-muted" },
-                          [
-                            _vm._v(
-                              "\n                      Email: " +
-                                _vm._s(cont.email) +
-                                "\n                    "
-                            ),
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "h6",
-                          { staticClass: "card-subtitle mb-2 text-muted" },
-                          [
-                            _vm._v(
-                              "\n                      Phone: " +
-                                _vm._s(cont.phone) +
-                                "\n                    "
-                            ),
-                          ]
-                        ),
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-4" }, [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-sm btn-danger",
+                  _c("div", { staticClass: "col" }, [
+                    _c("label", { staticClass: "form-label" }, [
+                      _vm._v("Email"),
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.cont.email,
+                          expression: "cont.email",
+                        },
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "email", required: "" },
+                      domProps: { value: _vm.cont.email },
+                      on: {
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.cont, "email", $event.target.value)
+                        },
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "valid-feedback" }, [
+                      _vm._v("Enter Valid Email"),
+                    ]),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col" }, [
+                    _c("label", { staticClass: "form-label" }, [
+                      _vm._v("Phone"),
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.cont.phone,
+                          expression: "cont.phone",
+                        },
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text", required: "" },
+                      domProps: { value: _vm.cont.phone },
+                      on: {
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.cont, "phone", $event.target.value)
+                        },
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "valid-feedback" }, [
+                      _vm._v("Enter Valid Phone Number"),
+                    ]),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-12" }, [
+                    _c("div", { staticClass: "form-check" }, [
+                      _c(
+                        "label",
+                        {
+                          staticClass: "form-check-label",
+                          attrs: { for: "invalidCheck" },
+                        },
+                        [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.cont.checkbox,
+                                expression: "cont.checkbox",
+                              },
+                            ],
+                            staticClass: "form-check-input me-1",
+                            attrs: {
+                              type: "checkbox",
+                              name: "checkbox",
+                              value: "1",
+                              required: "",
+                            },
+                            domProps: {
+                              checked: Array.isArray(_vm.cont.checkbox)
+                                ? _vm._i(_vm.cont.checkbox, "1") > -1
+                                : _vm.cont.checkbox,
+                            },
                             on: {
-                              click: function ($event) {
-                                return _vm.deleteContact(cont.id)
+                              change: function ($event) {
+                                var $$a = _vm.cont.checkbox,
+                                  $$el = $event.target,
+                                  $$c = $$el.checked ? true : false
+                                if (Array.isArray($$a)) {
+                                  var $$v = "1",
+                                    $$i = _vm._i($$a, $$v)
+                                  if ($$el.checked) {
+                                    $$i < 0 &&
+                                      _vm.$set(
+                                        _vm.cont,
+                                        "checkbox",
+                                        $$a.concat([$$v])
+                                      )
+                                  } else {
+                                    $$i > -1 &&
+                                      _vm.$set(
+                                        _vm.cont,
+                                        "checkbox",
+                                        $$a
+                                          .slice(0, $$i)
+                                          .concat($$a.slice($$i + 1))
+                                      )
+                                  }
+                                } else {
+                                  _vm.$set(_vm.cont, "checkbox", $$c)
+                                }
                               },
                             },
-                          },
-                          [
-                            _vm._v(
-                              "\n                      Delete\n                    "
-                            ),
-                          ]
+                          }),
+                          _vm._v(
+                            "\n                Agree to terms and conditions\n              "
+                          ),
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "valid-feedback" }, [
+                        _vm._v(
+                          "\n                You must agree before submitting.\n              "
                         ),
                       ]),
                     ]),
                   ]),
-                ]),
-              ])
-            }),
-            0
-          ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-12 text-center" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: { type: "submit" },
+                        on: {
+                          click: function ($event) {
+                            return _vm.addContact()
+                          },
+                        },
+                      },
+                      [_vm._v("\n              Add Contact\n            ")]
+                    ),
+                  ]),
+                ]
+              ),
+            ]),
+          ])
+        : _vm._e(),
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "container" }, [
+      _c("div", { staticClass: "container-fluid" }, [
+        _c("div", { staticClass: "row" }, [
+          _vm._m(1),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-12" }, [
+            _c(
+              "div",
+              { staticClass: "row" },
+              _vm._l(_vm.data, function (cont) {
+                return _c("div", { key: cont.id, staticClass: "col-4 mb-4" }, [
+                  _c("div", { staticClass: "card" }, [
+                    _c("div", { staticClass: "card-header" }, [
+                      _c("h5", { staticClass: "card-title" }, [
+                        _vm._v(_vm._s(cont.name)),
+                      ]),
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "card-body" }, [
+                      _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col" }, [
+                          _c(
+                            "h6",
+                            { staticClass: "card-subtitle mb-2 text-muted" },
+                            [
+                              _vm._v(
+                                "\n                        Email: " +
+                                  _vm._s(cont.email) +
+                                  "\n                      "
+                              ),
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "h6",
+                            { staticClass: "card-subtitle mb-2 text-muted" },
+                            [
+                              _vm._v(
+                                "\n                        Phone: " +
+                                  _vm._s(cont.phone) +
+                                  "\n                      "
+                              ),
+                            ]
+                          ),
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-4" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-sm btn-danger",
+                              on: {
+                                click: function ($event) {
+                                  return _vm.deleteContact(cont.id)
+                                },
+                              },
+                            },
+                            [
+                              _vm._v(
+                                "\n                        Delete\n                      "
+                              ),
+                            ]
+                          ),
+                        ]),
+                      ]),
+                    ]),
+                  ]),
+                ])
+              }),
+              0
+            ),
+          ]),
         ]),
       ]),
     ]),
   ])
 }
 var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-12 text-center mb-4" }, [
+      _c("h2", [_vm._v("Add Contacts")]),
+    ])
+  },
   function () {
     var _vm = this
     var _h = _vm.$createElement
@@ -28453,7 +28843,212 @@ var render = function () {
       ),
       _vm._v(" "),
       _vm.addForm
-        ? _c("div", { staticClass: "row" }, [_vm._m(0), _vm._v(" "), _vm._m(1)])
+        ? _c("div", { staticClass: "row" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-12 text-center" }, [
+              _c(
+                "form",
+                {
+                  staticClass: "row g-3 needs-validation my-4",
+                  attrs: { novalidate: "" },
+                  on: {
+                    submit: function ($event) {
+                      $event.preventDefault()
+                    },
+                  },
+                },
+                [
+                  _c("div", { staticClass: "col" }, [
+                    _c("label", { staticClass: "form-label" }, [
+                      _vm._v("Name"),
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.cont.name,
+                          expression: "cont.name",
+                        },
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text", required: "" },
+                      domProps: { value: _vm.cont.name },
+                      on: {
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.cont, "name", $event.target.value)
+                        },
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "valid-feedback" }, [
+                      _vm._v("Looks good!"),
+                    ]),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col" }, [
+                    _c("label", { staticClass: "form-label" }, [
+                      _vm._v("Email"),
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.cont.email,
+                          expression: "cont.email",
+                        },
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "email", required: "" },
+                      domProps: { value: _vm.cont.email },
+                      on: {
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.cont, "email", $event.target.value)
+                        },
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "valid-feedback" }, [
+                      _vm._v("Enter Valid Email"),
+                    ]),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col" }, [
+                    _c("label", { staticClass: "form-label" }, [
+                      _vm._v("Phone"),
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.cont.phone,
+                          expression: "cont.phone",
+                        },
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text", required: "" },
+                      domProps: { value: _vm.cont.phone },
+                      on: {
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.cont, "phone", $event.target.value)
+                        },
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "valid-feedback" }, [
+                      _vm._v("Enter Valid Phone Number"),
+                    ]),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-12" }, [
+                    _c("div", { staticClass: "form-check" }, [
+                      _c(
+                        "label",
+                        {
+                          staticClass: "form-check-label",
+                          attrs: { for: "invalidCheck" },
+                        },
+                        [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.cont.checkbox,
+                                expression: "cont.checkbox",
+                              },
+                            ],
+                            staticClass: "form-check-input me-1",
+                            attrs: {
+                              type: "checkbox",
+                              name: "checkbox",
+                              value: "1",
+                              required: "",
+                            },
+                            domProps: {
+                              checked: Array.isArray(_vm.cont.checkbox)
+                                ? _vm._i(_vm.cont.checkbox, "1") > -1
+                                : _vm.cont.checkbox,
+                            },
+                            on: {
+                              change: function ($event) {
+                                var $$a = _vm.cont.checkbox,
+                                  $$el = $event.target,
+                                  $$c = $$el.checked ? true : false
+                                if (Array.isArray($$a)) {
+                                  var $$v = "1",
+                                    $$i = _vm._i($$a, $$v)
+                                  if ($$el.checked) {
+                                    $$i < 0 &&
+                                      _vm.$set(
+                                        _vm.cont,
+                                        "checkbox",
+                                        $$a.concat([$$v])
+                                      )
+                                  } else {
+                                    $$i > -1 &&
+                                      _vm.$set(
+                                        _vm.cont,
+                                        "checkbox",
+                                        $$a
+                                          .slice(0, $$i)
+                                          .concat($$a.slice($$i + 1))
+                                      )
+                                  }
+                                } else {
+                                  _vm.$set(_vm.cont, "checkbox", $$c)
+                                }
+                              },
+                            },
+                          }),
+                          _vm._v(
+                            "\n                Agree to terms and conditions\n              "
+                          ),
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "valid-feedback" }, [
+                        _vm._v(
+                          "\n                You must agree before submitting.\n              "
+                        ),
+                      ]),
+                    ]),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-12 text-center" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: { type: "submit" },
+                        on: {
+                          click: function ($event) {
+                            return _vm.addContact()
+                          },
+                        },
+                      },
+                      [_vm._v("\n              Add Contact\n            ")]
+                    ),
+                  ]),
+                ]
+              ),
+            ]),
+          ])
         : _vm._e(),
     ]),
   ])
@@ -28465,100 +29060,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "col-12 text-center mb-4" }, [
       _c("h2", [_vm._v("Add Contacts")]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-12 text-center" }, [
-      _c(
-        "form",
-        {
-          staticClass: "row g-3 needs-validation my-4",
-          attrs: { novalidate: "" },
-        },
-        [
-          _c("div", { staticClass: "col" }, [
-            _c("label", { staticClass: "form-label" }, [_vm._v("Name")]),
-            _vm._v(" "),
-            _c("input", {
-              staticClass: "form-control",
-              attrs: { type: "text", required: "" },
-            }),
-            _vm._v(" "),
-            _c("div", { staticClass: "valid-feedback" }, [
-              _vm._v("Looks good!"),
-            ]),
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col" }, [
-            _c("label", { staticClass: "form-label" }, [_vm._v("Email")]),
-            _vm._v(" "),
-            _c("input", {
-              staticClass: "form-control",
-              attrs: { type: "email", required: "" },
-            }),
-            _vm._v(" "),
-            _c("div", { staticClass: "valid-feedback" }, [
-              _vm._v("Enter Valid Email"),
-            ]),
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col" }, [
-            _c("label", { staticClass: "form-label" }, [_vm._v("Phone")]),
-            _vm._v(" "),
-            _c("input", {
-              staticClass: "form-control",
-              attrs: { type: "text", required: "" },
-            }),
-            _vm._v(" "),
-            _c("div", { staticClass: "valid-feedback" }, [
-              _vm._v("Enter Valid Phone Number"),
-            ]),
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-12" }, [
-            _c("div", { staticClass: "form-check" }, [
-              _c(
-                "label",
-                {
-                  staticClass: "form-check-label",
-                  attrs: { for: "invalidCheck" },
-                },
-                [
-                  _c("input", {
-                    staticClass: "form-check-input me-1",
-                    attrs: {
-                      type: "checkbox",
-                      name: "checkbox",
-                      value: "1",
-                      required: "",
-                    },
-                  }),
-                  _vm._v(
-                    "\n\n                Agree to terms and conditions\n              "
-                  ),
-                ]
-              ),
-              _vm._v(" "),
-              _c("div", { staticClass: "valid-feedback" }, [
-                _vm._v(
-                  "\n                You must agree before submitting.\n              "
-                ),
-              ]),
-            ]),
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-12 text-center" }, [
-            _c(
-              "button",
-              { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-              [_vm._v("Add Contact")]
-            ),
-          ]),
-        ]
-      ),
     ])
   },
 ]

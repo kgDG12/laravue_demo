@@ -9,20 +9,39 @@
           <h2>Add Contacts</h2>
         </div>
         <div class="col-12 text-center">
-          <form class="row g-3 needs-validation my-4" novalidate>
+          <form
+            @submit.prevent=""
+            class="row g-3 needs-validation my-4"
+            novalidate
+          >
             <div class="col">
               <label class="form-label">Name</label>
-              <input type="text" class="form-control" required />
+              <input
+                v-model="cont.name"
+                type="text"
+                class="form-control"
+                required
+              />
               <div class="valid-feedback">Looks good!</div>
             </div>
             <div class="col">
               <label class="form-label">Email</label>
-              <input type="email" class="form-control" required />
+              <input
+                v-model="cont.email"
+                type="email"
+                class="form-control"
+                required
+              />
               <div class="valid-feedback">Enter Valid Email</div>
             </div>
             <div class="col">
               <label class="form-label">Phone</label>
-              <input type="text" class="form-control" required />
+              <input
+                v-model="cont.phone"
+                type="text"
+                class="form-control"
+                required
+              />
               <div class="valid-feedback">Enter Valid Phone Number</div>
             </div>
             <div class="col-12">
@@ -31,11 +50,11 @@
                   <input
                     class="form-check-input me-1"
                     type="checkbox"
+                    v-model="cont.checkbox"
                     name="checkbox"
                     value="1"
                     required
                   />
-
                   Agree to terms and conditions
                 </label>
                 <div class="valid-feedback">
@@ -44,7 +63,13 @@
               </div>
             </div>
             <div class="col-12 text-center">
-              <button class="btn btn-primary" type="submit">Add Contact</button>
+              <button
+                class="btn btn-primary"
+                @click="addContact()"
+                type="submit"
+              >
+                Add Contact
+              </button>
             </div>
           </form>
         </div>
@@ -61,6 +86,14 @@ export default {
         txt: "Open",
         cls: "btn btn-primary",
       },
+      cont: {
+        id: "",
+        name: "",
+        email: "",
+        phone: "",
+        checkbox: false,
+      },
+      edit: false,
     };
   },
   methods: {
@@ -73,6 +106,18 @@ export default {
         this.addForm = true;
         this.btn.txt = "Close";
         this.btn.cls = "btn btn-danger";
+      }
+    },
+    addContact() {
+      if (this.edit) {
+      } else {
+        axios
+          .post("http://localhost/fresh-app/api/add", this.cont)
+          .then((res) => res)
+          .then((res) => {
+            alert(res.data.message);
+          })
+          .catch((error) => console.log(error));
       }
     },
   },
