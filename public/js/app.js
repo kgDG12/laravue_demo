@@ -5299,6 +5299,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -5325,6 +5330,21 @@ __webpack_require__.r(__webpack_exports__);
         _this.data = res.data;
         _this.status = res.status;
       });
+    },
+    deleteContact: function deleteContact(id) {
+      var _this2 = this;
+
+      if (confirm("Are You Sure?")) {
+        fetch("http://localhost/fresh-app/api/del/".concat(id)).then(function (res) {
+          return res.json();
+        }).then(function (res) {
+          alert(res.message);
+
+          _this2.getContacts();
+        })["catch"](function (error) {
+          return console.log(error);
+        });
+      }
     }
   }
 });
@@ -5374,6 +5394,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -28291,7 +28329,24 @@ var render = function () {
                         ),
                       ]),
                       _vm._v(" "),
-                      _c("div", { staticClass: "col-4" }),
+                      _c("div", { staticClass: "col-4" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-sm btn-danger",
+                            on: {
+                              click: function ($event) {
+                                return _vm.deleteContact(cont.id)
+                              },
+                            },
+                          },
+                          [
+                            _vm._v(
+                              "\n                      Delete\n                    "
+                            ),
+                          ]
+                        ),
+                      ]),
                     ]),
                   ]),
                 ]),
@@ -28384,9 +28439,18 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container my-4" }, [
     _c("div", { staticClass: "container-fluid" }, [
-      _c("button", { class: _vm.btn.cls, on: { click: _vm.toggle } }, [
-        _vm._v("\n      " + _vm._s(_vm.btn.txt) + " Form\n    "),
-      ]),
+      _c(
+        "button",
+        {
+          class: _vm.btn.cls,
+          on: {
+            click: function ($event) {
+              return _vm.toggle()
+            },
+          },
+        },
+        [_vm._v("\n      " + _vm._s(_vm.btn.txt) + " Form\n    ")]
+      ),
       _vm._v(" "),
       _vm.addForm
         ? _c("div", { staticClass: "row" }, [_vm._m(0), _vm._v(" "), _vm._m(1)])
@@ -28451,6 +28515,38 @@ var staticRenderFns = [
             _vm._v(" "),
             _c("div", { staticClass: "valid-feedback" }, [
               _vm._v("Enter Valid Phone Number"),
+            ]),
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-12" }, [
+            _c("div", { staticClass: "form-check" }, [
+              _c(
+                "label",
+                {
+                  staticClass: "form-check-label",
+                  attrs: { for: "invalidCheck" },
+                },
+                [
+                  _c("input", {
+                    staticClass: "form-check-input me-1",
+                    attrs: {
+                      type: "checkbox",
+                      name: "checkbox",
+                      value: "1",
+                      required: "",
+                    },
+                  }),
+                  _vm._v(
+                    "\n\n                Agree to terms and conditions\n              "
+                  ),
+                ]
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "valid-feedback" }, [
+                _vm._v(
+                  "\n                You must agree before submitting.\n              "
+                ),
+              ]),
             ]),
           ]),
           _vm._v(" "),

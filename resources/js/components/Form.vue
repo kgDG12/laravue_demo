@@ -1,7 +1,7 @@
 <template>
   <div class="container my-4">
     <div class="container-fluid">
-      <button v-bind:class="btn.cls" v-on:click="toggle">
+      <button v-bind:class="btn.cls" @click="toggle()">
         {{ btn.txt }} Form
       </button>
       <div class="row" v-if="addForm">
@@ -25,6 +25,24 @@
               <input type="text" class="form-control" required />
               <div class="valid-feedback">Enter Valid Phone Number</div>
             </div>
+            <div class="col-12">
+              <div class="form-check">
+                <label class="form-check-label" for="invalidCheck">
+                  <input
+                    class="form-check-input me-1"
+                    type="checkbox"
+                    name="checkbox"
+                    value="1"
+                    required
+                  />
+
+                  Agree to terms and conditions
+                </label>
+                <div class="valid-feedback">
+                  You must agree before submitting.
+                </div>
+              </div>
+            </div>
             <div class="col-12 text-center">
               <button class="btn btn-primary" type="submit">Add Contact</button>
             </div>
@@ -46,7 +64,7 @@ export default {
     };
   },
   methods: {
-    toggle: function () {
+    toggle() {
       if (this.addForm) {
         this.addForm = false;
         this.btn.txt = "Open";

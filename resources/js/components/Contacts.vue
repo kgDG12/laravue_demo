@@ -23,7 +23,12 @@
                       </h6>
                     </div>
                     <div class="col-4">
-                      
+                      <button
+                        @click="deleteContact(cont.id)"
+                        class="btn btn-sm btn-danger"
+                      >
+                        Delete
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -60,6 +65,17 @@ export default {
           this.data = res.data;
           this.status = res.status;
         });
+    },
+    deleteContact(id) {
+      if (confirm("Are You Sure?")) {
+        fetch(`http://localhost/fresh-app/api/del/${id}`)
+          .then((res) => res.json())
+          .then((res) => {
+            alert(res.message);
+            this.getContacts();
+          })
+          .catch((error) => console.log(error));
+      }
     },
   },
 };
