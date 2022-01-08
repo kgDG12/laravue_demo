@@ -5366,24 +5366,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -5398,8 +5380,12 @@ __webpack_require__.r(__webpack_exports__);
         id: "",
         name: "",
         email: "",
-        phone: "",
-        checkbox: false
+        phone: ""
+      },
+      contErr: {
+        name: "",
+        email: "",
+        phone: ""
       },
       edit: false
     };
@@ -5427,9 +5413,21 @@ __webpack_require__.r(__webpack_exports__);
         axios.post("http://localhost/fresh-app/api/add", this.cont).then(function (res) {
           return res;
         }).then(function (res) {
-          alert(res.data.message);
+          if (res.data.status) {
+            _this.contErr.name = "";
+            _this.contErr.email = "";
+            _this.contErr.phone = "";
+            _this.cont.name = "";
+            _this.cont.email = "";
+            _this.cont.phone = "";
+            alert(res.data.message);
 
-          _this.getContacts();
+            _this.getContacts();
+          } else {
+            _this.contErr.name = res.data.errors.name[0];
+            _this.contErr.email = res.data.errors.email[0];
+            _this.contErr.phone = res.data.errors.phone[0]; // console.log(res.data.errors);
+          }
         })["catch"](function (error) {
           return console.log(error);
         });
@@ -28293,8 +28291,8 @@ var render = function () {
                       },
                     }),
                     _vm._v(" "),
-                    _c("div", { staticClass: "valid-feedback" }, [
-                      _vm._v("Looks good!"),
+                    _c("div", { staticClass: "text-danger" }, [
+                      _vm._v(_vm._s(_vm.contErr.name)),
                     ]),
                   ]),
                   _vm._v(" "),
@@ -28325,8 +28323,8 @@ var render = function () {
                       },
                     }),
                     _vm._v(" "),
-                    _c("div", { staticClass: "valid-feedback" }, [
-                      _vm._v("Enter Valid Email"),
+                    _c("div", { staticClass: "text-danger" }, [
+                      _vm._v(_vm._s(_vm.contErr.email)),
                     ]),
                   ]),
                   _vm._v(" "),
@@ -28357,83 +28355,8 @@ var render = function () {
                       },
                     }),
                     _vm._v(" "),
-                    _c("div", { staticClass: "valid-feedback" }, [
-                      _vm._v("Enter Valid Phone Number"),
-                    ]),
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-12" }, [
-                    _c("div", { staticClass: "form-check" }, [
-                      _c(
-                        "label",
-                        {
-                          staticClass: "form-check-label",
-                          attrs: { for: "invalidCheck" },
-                        },
-                        [
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.cont.checkbox,
-                                expression: "cont.checkbox",
-                              },
-                            ],
-                            staticClass: "form-check-input me-1",
-                            attrs: {
-                              type: "checkbox",
-                              name: "checkbox",
-                              value: "1",
-                              required: "",
-                            },
-                            domProps: {
-                              checked: Array.isArray(_vm.cont.checkbox)
-                                ? _vm._i(_vm.cont.checkbox, "1") > -1
-                                : _vm.cont.checkbox,
-                            },
-                            on: {
-                              change: function ($event) {
-                                var $$a = _vm.cont.checkbox,
-                                  $$el = $event.target,
-                                  $$c = $$el.checked ? true : false
-                                if (Array.isArray($$a)) {
-                                  var $$v = "1",
-                                    $$i = _vm._i($$a, $$v)
-                                  if ($$el.checked) {
-                                    $$i < 0 &&
-                                      _vm.$set(
-                                        _vm.cont,
-                                        "checkbox",
-                                        $$a.concat([$$v])
-                                      )
-                                  } else {
-                                    $$i > -1 &&
-                                      _vm.$set(
-                                        _vm.cont,
-                                        "checkbox",
-                                        $$a
-                                          .slice(0, $$i)
-                                          .concat($$a.slice($$i + 1))
-                                      )
-                                  }
-                                } else {
-                                  _vm.$set(_vm.cont, "checkbox", $$c)
-                                }
-                              },
-                            },
-                          }),
-                          _vm._v(
-                            "\n                Agree to terms and conditions\n              "
-                          ),
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "valid-feedback" }, [
-                        _vm._v(
-                          "\n                You must agree before submitting.\n              "
-                        ),
-                      ]),
+                    _c("div", { staticClass: "text-danger" }, [
+                      _vm._v(_vm._s(_vm.contErr.phone)),
                     ]),
                   ]),
                   _vm._v(" "),
@@ -28542,7 +28465,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "col-12 text-center mb-4" }, [
-      _c("h2", [_vm._v("Add Contacts")]),
+      _c("h2", [_vm._v("Add Contact")]),
     ])
   },
   function () {

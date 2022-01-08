@@ -7,7 +7,7 @@
       </button>
       <div class="row" v-if="addForm">
         <div class="col-12 text-center mb-4">
-          <h2>Add Contacts</h2>
+          <h2>Add Contact</h2>
         </div>
         <div class="col-12 text-center">
           <form
@@ -23,7 +23,7 @@
                 class="form-control"
                 required
               />
-              <div class="valid-feedback">Looks good!</div>
+              <div class="text-danger">{{ contErr.name }}</div>
             </div>
             <div class="col">
               <label class="form-label">Email</label>
@@ -33,7 +33,7 @@
                 class="form-control"
                 required
               />
-              <div class="valid-feedback">Enter Valid Email</div>
+              <div class="text-danger">{{ contErr.email }}</div>
             </div>
             <div class="col">
               <label class="form-label">Phone</label>
@@ -43,25 +43,7 @@
                 class="form-control"
                 required
               />
-              <div class="valid-feedback">Enter Valid Phone Number</div>
-            </div>
-            <div class="col-12">
-              <div class="form-check">
-                <label class="form-check-label" for="invalidCheck">
-                  <input
-                    class="form-check-input me-1"
-                    type="checkbox"
-                    v-model="cont.checkbox"
-                    name="checkbox"
-                    value="1"
-                    required
-                  />
-                  Agree to terms and conditions
-                </label>
-                <div class="valid-feedback">
-                  You must agree before submitting.
-                </div>
-              </div>
+              <div class="text-danger">{{ contErr.phone }}</div>
             </div>
             <div class="col-12 text-center">
               <button
@@ -136,7 +118,11 @@ export default {
         name: "",
         email: "",
         phone: "",
-        checkbox: false,
+      },
+      contErr: {
+        name: "",
+        email: "",
+        phone: "",
       },
       edit: false,
     };
@@ -164,8 +150,21 @@ export default {
           .post("http://localhost/fresh-app/api/add", this.cont)
           .then((res) => res)
           .then((res) => {
-            alert(res.data.message);
-            this.getContacts();
+            if (res.data.status) {
+              this.contErr.name = "";
+              this.contErr.email = "";
+              this.contErr.phone = "";
+              this.cont.name = "";
+              this.cont.email = "";
+              this.cont.phone = "";
+              alert(res.data.message);
+              this.getContacts();
+            } else {
+              this.contErr.name = res.data.errors.name[0];
+              this.contErr.email = res.data.errors.email[0];
+              this.contErr.phone = res.data.errors.phone[0];
+              // console.log(res.data.errors);
+            }
           })
           .catch((error) => console.log(error));
       }
