@@ -1,10 +1,29 @@
 <template>
   <div class="container my-4">
-    <!-- form -->
-    <div class="container-fluid">
-      <button v-bind:class="btn.cls" @click="toggle()">
+    <div class="d-flex">
+      <button class="" v-bind:class="btn.cls" @click="toggle()">
         {{ btn.txt }} Form
       </button>
+      <form @submit.prevent="" class="d-flex ms-auto">
+        <input
+          class="form-control me-2"
+          type="search"
+          placeholder="Search"
+          aria-label="Search"
+          v-model="searchStr"
+          @keyup="search(searchStr)"
+        />
+        <button
+          @click="search(searchStr)"
+          class="btn btn-outline-success"
+          type="submit"
+        >
+          Search
+        </button>
+      </form>
+    </div>
+    <!-- form -->
+    <div class="container-fluid">
       <div class="row" v-if="addForm">
         <div class="col-12 text-center mb-4">
           <h2>Add Contact</h2>
@@ -146,6 +165,7 @@ export default {
       },
       edit: false,
       editbtn: "btn btn-success",
+      searchStr: "",
     };
   },
   created() {
@@ -257,6 +277,21 @@ export default {
           })
           .catch((error) => console.log(error));
       }
+    },
+    search(str) {
+      axios
+        .get(`http://localhost/fresh-app/api/search/${str}`)
+        .then((res) => res)
+        .then((res) => {
+          var datal = res.data;
+          if (datal.status) {
+            this.data = datal.data;
+            this.status = datal.status;
+          } else {
+            this.getContacts();
+          }
+          // console.log(res);
+        });
     },
     reset() {
       this.edit = false;

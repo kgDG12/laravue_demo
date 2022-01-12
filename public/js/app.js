@@ -5386,6 +5386,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -5408,7 +5427,8 @@ __webpack_require__.r(__webpack_exports__);
         phone: ""
       },
       edit: false,
-      editbtn: "btn btn-success"
+      editbtn: "btn btn-success",
+      searchStr: ""
     };
   },
   created: function created() {
@@ -5525,6 +5545,23 @@ __webpack_require__.r(__webpack_exports__);
           return console.log(error);
         });
       }
+    },
+    search: function search(str) {
+      var _this6 = this;
+
+      axios.get("http://localhost/fresh-app/api/search/".concat(str)).then(function (res) {
+        return res;
+      }).then(function (res) {
+        var datal = res.data;
+
+        if (datal.status) {
+          _this6.data = datal.data;
+          _this6.status = datal.status;
+        } else {
+          _this6.getContacts();
+        } // console.log(res);
+
+      });
     },
     reset: function reset() {
       this.edit = false;
@@ -28309,7 +28346,7 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container my-4" }, [
-    _c("div", { staticClass: "container-fluid" }, [
+    _c("div", { staticClass: "d-flex" }, [
       _c(
         "button",
         {
@@ -28323,6 +28360,64 @@ var render = function () {
         [_vm._v("\n      " + _vm._s(_vm.btn.txt) + " Form\n    ")]
       ),
       _vm._v(" "),
+      _c(
+        "form",
+        {
+          staticClass: "d-flex ms-auto",
+          on: {
+            submit: function ($event) {
+              $event.preventDefault()
+            },
+          },
+        },
+        [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.searchStr,
+                expression: "searchStr",
+              },
+            ],
+            staticClass: "form-control me-2",
+            attrs: {
+              type: "search",
+              placeholder: "Search",
+              "aria-label": "Search",
+            },
+            domProps: { value: _vm.searchStr },
+            on: {
+              keyup: function ($event) {
+                return _vm.search(_vm.searchStr)
+              },
+              input: function ($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.searchStr = $event.target.value
+              },
+            },
+          }),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-outline-success",
+              attrs: { type: "submit" },
+              on: {
+                click: function ($event) {
+                  return _vm.search(_vm.searchStr)
+                },
+              },
+            },
+            [_vm._v("\n        Search\n      ")]
+          ),
+        ]
+      ),
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "container-fluid" }, [
       _vm.addForm
         ? _c("div", { staticClass: "row" }, [
             _vm._m(0),
