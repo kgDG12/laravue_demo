@@ -170,7 +170,6 @@ export default {
   },
   created() {
     this.getContacts();
-    this.$emit("contacts");
   },
   methods: {
     toggle() {

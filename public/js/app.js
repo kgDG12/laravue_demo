@@ -5433,7 +5433,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     this.getContacts();
-    this.$emit("contacts");
   },
   methods: {
     toggle: function toggle() {
