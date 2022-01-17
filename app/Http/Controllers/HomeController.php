@@ -9,6 +9,15 @@ class HomeController extends Controller
     //
     public function index()
     {
-        return view('index');
+        $menu = "home";
+        $title = "Home";
+        return view('index', compact('menu', 'title'));
+    }
+
+    public function register()
+    {
+        $menu = "register";
+        $title = "Register";
+        return view('register', compact('menu', 'title'));
     }
 }

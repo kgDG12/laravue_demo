@@ -16,7 +16,13 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
+            <a
+              class="nav-link"
+              aria-current="page"
+              :class="menu == 'home' ? 'active' : ''"
+              :href="homelink"
+              >Home</a
+            >
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Add</a>
@@ -38,9 +44,23 @@
               <li><hr class="dropdown-divider" /></li>
               <li><a class="dropdown-item" href="#">Something else here</a></li>
             </ul>
-          </li> -->          
+          </li> -->
         </ul>
-        <form class="d-flex">
+        <div class="d-flex">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a
+                :href="regilink"
+                :class="menu == 'register' ? 'active' : ''"
+                class="nav-link"
+                >Register</a
+              >
+            </li>
+            <li class="nav-item"><a class="nav-link">Log In</a></li>
+          </ul>
+          <!-- <button class="btn btn-primary">Register</button> -->
+        </div>
+        <!-- <form class="d-flex">
           <input
             class="form-control me-2"
             type="search"
@@ -48,8 +68,13 @@
             aria-label="Search"
           />
           <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
+        </form> -->
       </div>
     </div>
   </nav>
 </template>
+<script>
+export default {
+  props: ["homelink", "regilink", "menu"],
+};
+</script>
