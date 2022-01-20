@@ -92,7 +92,7 @@ export default {
         password: "",
         password_confirmation: "",
       },
-      login: false,
+      // login: false,
       msg: "",
     };
   },
@@ -113,7 +113,8 @@ export default {
             this.$session.set("user", datal.user);
             this.$session.set("access_token", datal.access_token);
             this.reset();
-            alert(datal.message);            
+            alert(datal.message);
+            window.location.reload();
           } else {
             this.userErr.name = datal.errors.name ? datal.errors.name[0] : "";
             this.userErr.email = datal.errors.email

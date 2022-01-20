@@ -67,7 +67,14 @@
           </ul>
           <!-- <button class="btn btn-primary">Register</button> -->
         </div>
-        <div v-else class="d-flex">
+        <div v-if="login" class="d-flex">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a @click.prevent class="nav-link">{{ user.name }}</a>
+            </li>
+          </ul>
+        </div>
+        <div v-if="login" class="d-flex">
           <ul class="navbar-nav">
             <li class="nav-item">
               <a href="#" @click.prevent="logout()" class="nav-link">Log Out</a>
@@ -93,6 +100,7 @@ export default {
   data() {
     return {
       login: false,
+      user: [],
     };
   },
   props: ["homelink", "regilink", "logilink", "menu"],
@@ -103,9 +111,11 @@ export default {
     checkSession() {
       if (this.$session.has("user")) {
         this.login = true;
+        this.user = this.$session.get("user");
       }
     },
     logout() {
+      axios.post("http://localhost/fresh-app/api/del_token", this.user.id);
       this.$session.clear();
       window.location.reload();
     },

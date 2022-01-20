@@ -34,7 +34,7 @@
                 <div class="col-12">{{ msg }}</div>
                 <div class="col-12">
                   <button
-                    @click="reset()"
+                    @click="login()"
                     type="submit"
                     class="btn btn-primary"
                   >
@@ -65,18 +65,41 @@ export default {
         password: "",
       },
       msg: "",
-      login: false,
+    //   login: false,
     };
   },
-  created() {},
+  created() {
+    this.getToken();
+  },
   methods: {
+    login() {
+      this.getToken();
+      axios
+        .post("http://localhost/fresh-app/api/login", this.userData)
+        .then((res) => res)
+        .then((res) => {
+          var datal = res.data;
+          if (datal.status) {
+            this.$session.start();
+            this.$session.clear();
+            this.$session.set("user", datal.user);
+            this.$session.set("access_token", datal.access_token);
+            this.reset();
+            alert(datal.message);
+            window.location.reload();
+          } else {
+            alert(datal.message);
+          }
+        });
+    },
     reset() {
       var userData = this.userData;
-      userData.name = "";
       userData.email = "";
       userData.password = "";
-      userData.password_confirmation = "";
       // this.msg = "";
+    },
+    getToken() {
+      axios.get("http://localhost/fresh-app/sanctum/csrf-cookie");
     },
   },
 };

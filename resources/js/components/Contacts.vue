@@ -1,7 +1,7 @@
 <template>
   <div class="container my-4">
     <div class="d-flex">
-      <button class="" v-bind:class="btn.cls" @click="toggle()">
+      <button v-if="login" class="" v-bind:class="btn.cls" @click="toggle()">
         {{ btn.txt }} Form
       </button>
       <form @submit.prevent="" class="d-flex ms-auto">
@@ -116,7 +116,7 @@
                           Phone: {{ cont.phone }}
                         </h6>
                       </div>
-                      <div class="col-4">
+                      <div v-if="login" class="col-4">
                         <button
                           @click="editContact(cont.id)"
                           class="btn btn-sm btn-success"
@@ -142,9 +142,11 @@
   </div>
 </template>
 <script>
-export default {  
+export default {
   data() {
     return {
+      login: false,
+      headers: [],
       data: [],
       status: "",
       addForm: false,
@@ -170,6 +172,7 @@ export default {
   },
   created() {
     this.getContacts();
+    this.getAccessToken();
   },
   methods: {
     toggle() {
@@ -184,8 +187,13 @@ export default {
       }
     },
     addContact() {
+      const headers = {
+        Authorization: "Bearer " + this.$session.get("access_token"),
+      };
       axios
-        .post("http://localhost/fresh-app/api/add", this.cont)
+        .post("http://localhost/fresh-app/api/add", this.cont, {
+          headers: headers,
+        })
         .then((res) => res)
         .then((res) => {
           if (res.data.status) {
@@ -213,8 +221,13 @@ export default {
         .catch((error) => console.log(error));
     },
     editContact(id) {
+      const headers = {
+        Authorization: "Bearer " + this.$session.get("access_token"),
+      };
       axios
-        .get(`http://localhost/fresh-app/api/get/${id}`)
+        .get(`http://localhost/fresh-app/api/get/${id}`, {
+          headers: headers,
+        })
         .then((res) => res)
         .then((res) => {
           var datal = res.data;
@@ -233,7 +246,9 @@ export default {
     },
     updContact(id) {
       axios
-        .put(`http://localhost/fresh-app/api/upd/${id}`, this.cont)
+        .put(`http://localhost/fresh-app/api/upd/${id}`, this.cont, {
+          headers: this.headers,
+        })
         .then((res) => res)
         .then((res) => {
           var datal = res.data;
@@ -266,9 +281,14 @@ export default {
       // .then((res) => console.log((res)));
     },
     deleteContact(id) {
+      const headers = {
+        Authorization: "Bearer " + this.$session.get("access_token"),
+      };
       if (confirm("Are You Sure?")) {
         axios
-          .get(`http://localhost/fresh-app/api/del/${id}`)
+          .get(`http://localhost/fresh-app/api/del/${id}`, {
+            headers: headers,
+          })
           .then((res) => res)
           .then((res) => {
             alert(res.data.message);
@@ -291,6 +311,18 @@ export default {
           }
           // console.log(res);
         });
+    },
+    getAccessToken() {
+      if (this.$session.has("user")) {
+        this.login = true;
+        // this.user = this.$session.get("user");
+      }
+      if (this.$session.has("access_token")) {
+        const headers = {
+          Authorization: "Bearer " + this.$session.get("access_token"),
+        };
+        this.headers = headers;
+      }
     },
     reset() {
       this.edit = false;

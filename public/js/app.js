@@ -5408,6 +5408,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
+      login: false,
+      headers: [],
       data: [],
       status: "",
       addForm: false,
@@ -5433,6 +5435,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     this.getContacts();
+    this.getAccessToken();
   },
   methods: {
     toggle: function toggle() {
@@ -5449,7 +5452,12 @@ __webpack_require__.r(__webpack_exports__);
     addContact: function addContact() {
       var _this = this;
 
-      axios.post("http://localhost/fresh-app/api/add", this.cont).then(function (res) {
+      var headers = {
+        Authorization: "Bearer " + this.$session.get("access_token")
+      };
+      axios.post("http://localhost/fresh-app/api/add", this.cont, {
+        headers: headers
+      }).then(function (res) {
         return res;
       }).then(function (res) {
         if (res.data.status) {
@@ -5474,7 +5482,12 @@ __webpack_require__.r(__webpack_exports__);
     editContact: function editContact(id) {
       var _this2 = this;
 
-      axios.get("http://localhost/fresh-app/api/get/".concat(id)).then(function (res) {
+      var headers = {
+        Authorization: "Bearer " + this.$session.get("access_token")
+      };
+      axios.get("http://localhost/fresh-app/api/get/".concat(id), {
+        headers: headers
+      }).then(function (res) {
         return res;
       }).then(function (res) {
         var datal = res.data;
@@ -5497,7 +5510,9 @@ __webpack_require__.r(__webpack_exports__);
     updContact: function updContact(id) {
       var _this3 = this;
 
-      axios.put("http://localhost/fresh-app/api/upd/".concat(id), this.cont).then(function (res) {
+      axios.put("http://localhost/fresh-app/api/upd/".concat(id), this.cont, {
+        headers: this.headers
+      }).then(function (res) {
         return res;
       }).then(function (res) {
         var datal = res.data;
@@ -5533,8 +5548,14 @@ __webpack_require__.r(__webpack_exports__);
     deleteContact: function deleteContact(id) {
       var _this5 = this;
 
+      var headers = {
+        Authorization: "Bearer " + this.$session.get("access_token")
+      };
+
       if (confirm("Are You Sure?")) {
-        axios.get("http://localhost/fresh-app/api/del/".concat(id)).then(function (res) {
+        axios.get("http://localhost/fresh-app/api/del/".concat(id), {
+          headers: headers
+        }).then(function (res) {
           return res;
         }).then(function (res) {
           alert(res.data.message);
@@ -5561,6 +5582,18 @@ __webpack_require__.r(__webpack_exports__);
         } // console.log(res);
 
       });
+    },
+    getAccessToken: function getAccessToken() {
+      if (this.$session.has("user")) {
+        this.login = true; // this.user = this.$session.get("user");
+      }
+
+      if (this.$session.has("access_token")) {
+        var headers = {
+          Authorization: "Bearer " + this.$session.get("access_token")
+        };
+        this.headers = headers;
+      }
     },
     reset: function reset() {
       this.edit = false;
@@ -5685,18 +5718,48 @@ __webpack_require__.r(__webpack_exports__);
         email: "",
         password: ""
       },
-      msg: "",
-      login: false
+      msg: "" //   login: false,
+
     };
   },
-  created: function created() {},
+  created: function created() {
+    this.getToken();
+  },
   methods: {
+    login: function login() {
+      var _this = this;
+
+      this.getToken();
+      axios.post("http://localhost/fresh-app/api/login", this.userData).then(function (res) {
+        return res;
+      }).then(function (res) {
+        var datal = res.data;
+
+        if (datal.status) {
+          _this.$session.start();
+
+          _this.$session.clear();
+
+          _this.$session.set("user", datal.user);
+
+          _this.$session.set("access_token", datal.access_token);
+
+          _this.reset();
+
+          alert(datal.message);
+          window.location.reload();
+        } else {
+          alert(datal.message);
+        }
+      });
+    },
     reset: function reset() {
       var userData = this.userData;
-      userData.name = "";
       userData.email = "";
-      userData.password = "";
-      userData.password_confirmation = ""; // this.msg = "";
+      userData.password = ""; // this.msg = "";
+    },
+    getToken: function getToken() {
+      axios.get("http://localhost/fresh-app/sanctum/csrf-cookie");
     }
   }
 });
@@ -5804,10 +5867,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      login: false
+      login: false,
+      user: []
     };
   },
   props: ["homelink", "regilink", "logilink", "menu"],
@@ -5818,9 +5889,11 @@ __webpack_require__.r(__webpack_exports__);
     checkSession: function checkSession() {
       if (this.$session.has("user")) {
         this.login = true;
+        this.user = this.$session.get("user");
       }
     },
     logout: function logout() {
+      axios.post("http://localhost/fresh-app/api/del_token", this.user.id);
       this.$session.clear();
       window.location.reload();
     }
@@ -5933,7 +6006,7 @@ __webpack_require__.r(__webpack_exports__);
         password: "",
         password_confirmation: ""
       },
-      login: false,
+      // login: false,
       msg: ""
     };
   },
@@ -5962,6 +6035,7 @@ __webpack_require__.r(__webpack_exports__);
           _this.reset();
 
           alert(datal.message);
+          window.location.reload();
         } else {
           _this.userErr.name = datal.errors.name ? datal.errors.name[0] : "";
           _this.userErr.email = datal.errors.email ? datal.errors.email[0] : "";
@@ -28894,18 +28968,20 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container my-4" }, [
     _c("div", { staticClass: "d-flex" }, [
-      _c(
-        "button",
-        {
-          class: _vm.btn.cls,
-          on: {
-            click: function ($event) {
-              return _vm.toggle()
+      _vm.login
+        ? _c(
+            "button",
+            {
+              class: _vm.btn.cls,
+              on: {
+                click: function ($event) {
+                  return _vm.toggle()
+                },
+              },
             },
-          },
-        },
-        [_vm._v("\n      " + _vm._s(_vm.btn.txt) + " Form\n    ")]
-      ),
+            [_vm._v("\n      " + _vm._s(_vm.btn.txt) + " Form\n    ")]
+          )
+        : _vm._e(),
       _vm._v(" "),
       _c(
         "form",
@@ -29187,41 +29263,43 @@ var render = function () {
                           ),
                         ]),
                         _vm._v(" "),
-                        _c("div", { staticClass: "col-4" }, [
-                          _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-sm btn-success",
-                              on: {
-                                click: function ($event) {
-                                  return _vm.editContact(cont.id)
+                        _vm.login
+                          ? _c("div", { staticClass: "col-4" }, [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-sm btn-success",
+                                  on: {
+                                    click: function ($event) {
+                                      return _vm.editContact(cont.id)
+                                    },
+                                  },
                                 },
-                              },
-                            },
-                            [
-                              _vm._v(
-                                "\n                        Edit\n                      "
+                                [
+                                  _vm._v(
+                                    "\n                        Edit\n                      "
+                                  ),
+                                ]
                               ),
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-sm btn-danger",
-                              on: {
-                                click: function ($event) {
-                                  return _vm.deleteContact(cont.id)
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-sm btn-danger",
+                                  on: {
+                                    click: function ($event) {
+                                      return _vm.deleteContact(cont.id)
+                                    },
+                                  },
                                 },
-                              },
-                            },
-                            [
-                              _vm._v(
-                                "\n                        Delete\n                      "
+                                [
+                                  _vm._v(
+                                    "\n                        Delete\n                      "
+                                  ),
+                                ]
                               ),
-                            ]
-                          ),
-                        ]),
+                            ])
+                          : _vm._e(),
                       ]),
                     ]),
                   ]),
@@ -29424,7 +29502,7 @@ var render = function () {
                           attrs: { type: "submit" },
                           on: {
                             click: function ($event) {
-                              return _vm.reset()
+                              return _vm.login()
                             },
                           },
                         },
@@ -29548,7 +29626,31 @@ var render = function () {
                     ]),
                   ]),
                 ])
-              : _c("div", { staticClass: "d-flex" }, [
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.login
+              ? _c("div", { staticClass: "d-flex" }, [
+                  _c("ul", { staticClass: "navbar-nav" }, [
+                    _c("li", { staticClass: "nav-item" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "nav-link",
+                          on: {
+                            click: function ($event) {
+                              $event.preventDefault()
+                            },
+                          },
+                        },
+                        [_vm._v(_vm._s(_vm.user.name))]
+                      ),
+                    ]),
+                  ]),
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.login
+              ? _c("div", { staticClass: "d-flex" }, [
                   _c("ul", { staticClass: "navbar-nav" }, [
                     _c("li", { staticClass: "nav-item" }, [
                       _c(
@@ -29567,7 +29669,8 @@ var render = function () {
                       ),
                     ]),
                   ]),
-                ]),
+                ])
+              : _vm._e(),
           ]
         ),
       ]),
