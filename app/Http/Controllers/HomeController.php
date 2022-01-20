@@ -20,4 +20,11 @@ class HomeController extends Controller
         $title = "Register";
         return view('register', compact('menu', 'title'));
     }
+
+    public function login()
+    {
+        $menu = "login";
+        $title = "Login";
+        return view('login', compact('menu', 'title'));
+    }
 }
