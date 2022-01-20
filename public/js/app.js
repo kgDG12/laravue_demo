@@ -5677,6 +5677,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
+      userData: {
+        email: "",
+        password: ""
+      },
+      userErr: {
+        email: "",
+        password: ""
+      },
+      msg: "",
       login: false
     };
   },
@@ -5793,6 +5802,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -5808,6 +5819,10 @@ __webpack_require__.r(__webpack_exports__);
       if (this.$session.has("user")) {
         this.login = true;
       }
+    },
+    logout: function logout() {
+      this.$session.clear();
+      window.location.reload();
     }
   }
 });
@@ -29533,7 +29548,26 @@ var render = function () {
                     ]),
                   ]),
                 ])
-              : _c("div", { staticClass: "d-flex" }, [_vm._m(2)]),
+              : _c("div", { staticClass: "d-flex" }, [
+                  _c("ul", { staticClass: "navbar-nav" }, [
+                    _c("li", { staticClass: "nav-item" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "nav-link",
+                          attrs: { href: "#" },
+                          on: {
+                            click: function ($event) {
+                              $event.preventDefault()
+                              return _vm.logout()
+                            },
+                          },
+                        },
+                        [_vm._v("Log Out")]
+                      ),
+                    ]),
+                  ]),
+                ]),
           ]
         ),
       ]),
@@ -29568,16 +29602,6 @@ var staticRenderFns = [
     return _c("li", { staticClass: "nav-item" }, [
       _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
         _vm._v("Add"),
-      ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("ul", { staticClass: "navbar-nav" }, [
-      _c("li", { staticClass: "nav-item" }, [
-        _c("a", { staticClass: "nav-link" }, [_vm._v("Log Out")]),
       ]),
     ])
   },

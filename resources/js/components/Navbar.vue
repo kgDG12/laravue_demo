@@ -46,7 +46,7 @@
             </ul>
           </li> -->
         </ul>
-        <div class="d-flex">
+        <div v-if="!login" class="d-flex">
           <ul class="navbar-nav">
             <li class="nav-item">
               <a
@@ -56,7 +56,22 @@
                 >Register</a
               >
             </li>
-            <li class="nav-item"><a class="nav-link">Log In</a></li>
+            <li class="nav-item">
+              <a
+                :href="logilink"
+                :class="menu == 'login' ? 'active' : ''"
+                class="nav-link"
+                >Log In</a
+              >
+            </li>
+          </ul>
+          <!-- <button class="btn btn-primary">Register</button> -->
+        </div>
+        <div v-else class="d-flex">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a href="#" @click.prevent="logout()" class="nav-link">Log Out</a>
+            </li>
           </ul>
           <!-- <button class="btn btn-primary">Register</button> -->
         </div>
@@ -75,6 +90,25 @@
 </template>
 <script>
 export default {
-  props: ["homelink", "regilink", "menu"],
+  data() {
+    return {
+      login: false,
+    };
+  },
+  props: ["homelink", "regilink", "logilink", "menu"],
+  created() {
+    this.checkSession();
+  },
+  methods: {
+    checkSession() {
+      if (this.$session.has("user")) {
+        this.login = true;
+      }
+    },
+    logout() {
+      this.$session.clear();
+      window.location.reload();
+    },
+  },
 };
 </script>

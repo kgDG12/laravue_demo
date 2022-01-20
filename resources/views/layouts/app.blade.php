@@ -12,7 +12,11 @@
 
 <body>
     <div id="app">
-        <navbar homelink="{{ route('index') }}" regilink="{{ route('register') }}" menu="{{ $menu }}"></navbar>
+        <navbar 
+        homelink="{{ route('index') }}" 
+        regilink="{{ route('register') }}" 
+        logilink="{{ route('login') }}" 
+        menu="{{ $menu }}"></navbar>
         @yield('content')
     </div>
 
