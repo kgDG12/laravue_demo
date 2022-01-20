@@ -115,7 +115,17 @@ export default {
       }
     },
     logout() {
-      axios.post("http://localhost/fresh-app/api/del_token", this.user.id);
+      const headers = {
+        Authorization: "Bearer " + this.$session.get("access_token"),
+      };
+      axios
+        .get(`http://localhost/fresh-app/api/del_token/${this.user.id}`, {
+          headers: headers,
+        })
+        .then((res) => res)
+        .then((res) => {
+          alert(res.data.message);
+        });
       this.$session.clear();
       window.location.reload();
     },

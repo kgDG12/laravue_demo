@@ -245,9 +245,12 @@ export default {
         .catch((error) => console.log(error));
     },
     updContact(id) {
+      const headers = {
+        Authorization: "Bearer " + this.$session.get("access_token"),
+      };
       axios
         .put(`http://localhost/fresh-app/api/upd/${id}`, this.cont, {
-          headers: this.headers,
+          headers: headers,
         })
         .then((res) => res)
         .then((res) => {

@@ -5510,8 +5510,11 @@ __webpack_require__.r(__webpack_exports__);
     updContact: function updContact(id) {
       var _this3 = this;
 
+      var headers = {
+        Authorization: "Bearer " + this.$session.get("access_token")
+      };
       axios.put("http://localhost/fresh-app/api/upd/".concat(id), this.cont, {
-        headers: this.headers
+        headers: headers
       }).then(function (res) {
         return res;
       }).then(function (res) {
@@ -5893,7 +5896,16 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     logout: function logout() {
-      axios.post("http://localhost/fresh-app/api/del_token", this.user.id);
+      var headers = {
+        Authorization: "Bearer " + this.$session.get("access_token")
+      };
+      axios.get("http://localhost/fresh-app/api/del_token/".concat(this.user.id), {
+        headers: headers
+      }).then(function (res) {
+        return res;
+      }).then(function (res) {
+        alert(res.data.message);
+      });
       this.$session.clear();
       window.location.reload();
     }
