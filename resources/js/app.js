@@ -8,6 +8,9 @@ require('./bootstrap');
 
 window.Vue = require('vue').default;
 
+import VueSession from 'vue-session'
+Vue.use(VueSession)
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -23,6 +26,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('navbar', require('./components/Navbar.vue').default);
 Vue.component('contacts', require('./components/Contacts.vue').default);
 Vue.component('register', require('./components/Register.vue').default);
+Vue.component('login', require('./components/Login.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
