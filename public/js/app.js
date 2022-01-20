@@ -29240,81 +29240,85 @@ var render = function () {
               { staticClass: "row" },
               _vm._l(_vm.data, function (cont) {
                 return _c("div", { key: cont.id, staticClass: "col-4 mb-4" }, [
-                  _c("div", { staticClass: "card" }, [
-                    _c("div", { staticClass: "card-header" }, [
-                      _c("h5", { staticClass: "card-title" }, [
-                        _vm._v(_vm._s(cont.name)),
-                      ]),
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "card-body" }, [
-                      _c("div", { staticClass: "row" }, [
-                        _c("div", { staticClass: "col" }, [
-                          _c(
-                            "h6",
-                            { staticClass: "card-subtitle mb-2 text-muted" },
-                            [
-                              _vm._v(
-                                "\n                        Email: " +
-                                  _vm._s(cont.email) +
-                                  "\n                      "
-                              ),
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "h6",
-                            { staticClass: "card-subtitle mb-2 text-muted" },
-                            [
-                              _vm._v(
-                                "\n                        Phone: " +
-                                  _vm._s(cont.phone) +
-                                  "\n                      "
-                              ),
-                            ]
-                          ),
+                  _c(
+                    "div",
+                    { staticClass: "card text-white border-secondary" },
+                    [
+                      _c("div", { staticClass: "card-header bg-dark" }, [
+                        _c("h5", { staticClass: "card-title" }, [
+                          _vm._v(_vm._s(cont.name)),
                         ]),
-                        _vm._v(" "),
-                        _vm.login
-                          ? _c("div", { staticClass: "col-4" }, [
-                              _c(
-                                "button",
-                                {
-                                  staticClass: "btn btn-sm btn-success",
-                                  on: {
-                                    click: function ($event) {
-                                      return _vm.editContact(cont.id)
-                                    },
-                                  },
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                        Edit\n                      "
-                                  ),
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "button",
-                                {
-                                  staticClass: "btn btn-sm btn-danger",
-                                  on: {
-                                    click: function ($event) {
-                                      return _vm.deleteContact(cont.id)
-                                    },
-                                  },
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                        Delete\n                      "
-                                  ),
-                                ]
-                              ),
-                            ])
-                          : _vm._e(),
                       ]),
-                    ]),
-                  ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "card-body" }, [
+                        _c("div", { staticClass: "row" }, [
+                          _c("div", { staticClass: "col" }, [
+                            _c(
+                              "h6",
+                              { staticClass: "card-subtitle mb-2 text-muted" },
+                              [
+                                _vm._v(
+                                  "\n                        Email: " +
+                                    _vm._s(cont.email) +
+                                    "\n                      "
+                                ),
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "h6",
+                              { staticClass: "card-subtitle mb-2 text-muted" },
+                              [
+                                _vm._v(
+                                  "\n                        Phone: " +
+                                    _vm._s(cont.phone) +
+                                    "\n                      "
+                                ),
+                              ]
+                            ),
+                          ]),
+                          _vm._v(" "),
+                          _vm.login
+                            ? _c("div", { staticClass: "col-4" }, [
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn btn-sm btn-success",
+                                    on: {
+                                      click: function ($event) {
+                                        return _vm.editContact(cont.id)
+                                      },
+                                    },
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                        Edit\n                      "
+                                    ),
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn btn-sm btn-danger",
+                                    on: {
+                                      click: function ($event) {
+                                        return _vm.deleteContact(cont.id)
+                                      },
+                                    },
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                        Delete\n                      "
+                                    ),
+                                  ]
+                                ),
+                              ])
+                            : _vm._e(),
+                        ]),
+                      ]),
+                    ]
+                  ),
                 ])
               }),
               0
@@ -29578,7 +29582,7 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c(
     "nav",
-    { staticClass: "navbar navbar-expand-lg navbar-light bg-light" },
+    { staticClass: "navbar navbar-expand-lg navbar-dark bg-dark" },
     [
       _c("div", { staticClass: "container-fluid" }, [
         _c("a", { staticClass: "navbar-brand", attrs: { href: "#" } }, [

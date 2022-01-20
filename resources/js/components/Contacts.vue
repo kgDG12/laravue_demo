@@ -102,8 +102,8 @@
           <div class="col-12">
             <div class="row">
               <div v-for="cont in data" :key="cont.id" class="col-4 mb-4">
-                <div class="card">
-                  <div class="card-header">
+                <div class="card text-white border-secondary">
+                  <div class="card-header bg-dark">
                     <h5 class="card-title">{{ cont.name }}</h5>
                   </div>
                   <div class="card-body">
