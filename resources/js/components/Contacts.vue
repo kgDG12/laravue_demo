@@ -1,92 +1,101 @@
 <template>
   <div class="container my-4">
-    <div class="d-flex">
-      <button v-if="login" class="" v-bind:class="btn.cls" @click="toggle()">
-        {{ btn.txt }} Form
-      </button>
-      <form @submit.prevent="" class="d-flex ms-auto">
-        <input
-          class="form-control me-2"
-          type="search"
-          placeholder="Search"
-          aria-label="Search"
-          v-model="searchStr"
-          @keyup="search(searchStr)"
-        />
-        <button
-          @click="search(searchStr)"
-          class="btn btn-outline-success"
-          type="submit"
-        >
-          Search
-        </button>
-      </form>
-    </div>
-    <!-- form -->
-    <div class="container-fluid">
-      <div class="row" v-if="addForm">
-        <div class="col-12 text-center mb-4">
-          <h2>Add Contact</h2>
-        </div>
-        <div class="col-12 text-center">
-          <div class="row">
-            <form
-              @submit.prevent=""
-              class="row g-3 needs-validation my-4"
-              novalidate
+    <div class="container">
+      <div class="container-fluid">
+        <div class="d-flex">
+          <button
+            v-if="login"
+            class=""
+            v-bind:class="btn.cls"
+            @click="toggle()"
+          >
+            {{ btn.txt }} Form
+          </button>
+          <form @submit.prevent="" class="d-flex ms-auto">
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+              v-model="searchStr"
+              @keyup="search(searchStr)"
+            />
+            <button
+              @click="search(searchStr)"
+              class="btn btn-outline-success"
+              type="submit"
             >
-              <div class="col">
-                <label class="form-label">Name</label>
-                <input
-                  v-model="cont.name"
-                  type="text"
-                  class="form-control"
-                  required
-                />
-                <div class="text-danger">{{ contErr.name }}</div>
-              </div>
-              <div class="col">
-                <label class="form-label">Email</label>
-                <input
-                  v-model="cont.email"
-                  type="email"
-                  class="form-control"
-                  required
-                />
-                <div class="text-danger">{{ contErr.email }}</div>
-              </div>
-              <div class="col">
-                <label class="form-label">Phone</label>
-                <input
-                  v-model="cont.phone"
-                  type="text"
-                  class="form-control"
-                  required
-                />
-                <div class="text-danger">{{ contErr.phone }}</div>
-              </div>
-              <div class="col-12 text-center">
-                <button
-                  v-if="!edit"
-                  class="btn btn-primary"
-                  @click="addContact()"
-                  type="submit"
+              Search
+            </button>
+          </form>
+        </div>
+        <!-- form -->
+        <div class="container-fluid w-75">
+          <div class="row" v-if="addForm">
+            <div class="col-12 text-center mb-4">
+              <h2>Add Contact</h2>
+            </div>
+            <div class="col-12 text-center">
+              <div class="row">
+                <form
+                  @submit.prevent=""
+                  class="row g-3 needs-validation my-4"
+                  novalidate
                 >
-                  Add Contact
-                </button>
-                <button
-                  v-if="edit"
-                  class="btn btn-success"
-                  @click="updContact(cont.id)"
-                  type="submit"
-                >
-                  Update Contact
-                </button>
-                <button class="btn btn-secondary" @click="reset()">
-                  Reset
-                </button>
+                  <div class="col">
+                    <label class="form-label">Name</label>
+                    <input
+                      v-model="cont.name"
+                      type="text"
+                      class="form-control"
+                      required
+                    />
+                    <div class="text-danger">{{ contErr.name }}</div>
+                  </div>
+                  <div class="col">
+                    <label class="form-label">Email</label>
+                    <input
+                      v-model="cont.email"
+                      type="email"
+                      class="form-control"
+                      required
+                    />
+                    <div class="text-danger">{{ contErr.email }}</div>
+                  </div>
+                  <div class="col">
+                    <label class="form-label">Phone</label>
+                    <input
+                      v-model="cont.phone"
+                      type="text"
+                      class="form-control"
+                      required
+                    />
+                    <div class="text-danger">{{ contErr.phone }}</div>
+                  </div>
+                  <div class="col-12 text-center">
+                    <button
+                      v-if="!edit"
+                      class="btn btn-primary"
+                      @click="addContact()"
+                      type="submit"
+                    >
+                      Add Contact
+                    </button>
+                    <button
+                      v-if="edit"
+                      class="btn btn-success"
+                      @click="updContact(cont.id)"
+                      type="submit"
+                    >
+                      Update Contact
+                    </button>
+                    <button class="btn btn-secondary" @click="reset()">
+                      Reset
+                    </button>
+                  </div>
+                </form>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       </div>
